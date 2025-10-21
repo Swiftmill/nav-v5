@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HyperGX</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="galaxy-canvas" aria-hidden="true"></canvas>
+      <div class="gradient-orbit" aria-hidden="true"></div>
+
+      <aside class="sidebar glass" id="sidebar">
+        <button class="sidebar-btn" data-panel="favorites" title="Favoris">
+          <svg viewBox="0 0 24 24" role="presentation"><path d="M12 3.8l2.3 4.7 5.2.8-3.7 3.6.9 5.1-4.7-2.5-4.7 2.5.9-5.1-3.7-3.6 5.2-.8L12 3.8z"/></svg>
+        </button>
+        <button class="sidebar-btn" data-panel="history" title="Historique">
+          <svg viewBox="0 0 24 24"><path d="M12 5a7 7 0 016.9 6.1h1.6l-2.8 3-2.8-3h1.9A5 5 0 1012 17a4.9 4.9 0 003.7-1.7l1.5 1.3A7 7 0 1112 5zm1 3v4.1l3 1.8-.8 1.3L11 13V8h2z"/></svg>
+        </button>
+        <button class="sidebar-btn" data-panel="downloads" title="Téléchargements">
+          <svg viewBox="0 0 24 24"><path d="M11 4h2v8l3.3-3.3 1.4 1.4-5.7 5.7-5.7-5.7 1.4-1.4L11 12V4zm-7 14h16v2H4v-2z"/></svg>
+        </button>
+        <button class="sidebar-btn" data-panel="settings" title="Paramètres">
+          <svg viewBox="0 0 24 24"><path d="M10.3 2.3l1.4-.3 1.4.3.5 2.1a6.6 6.6 0 012 .9l2-.9 1.1 1.1-.9 2a6.6 6.6 0 01.1 2.2l2 .9-.3 1.4-.3 1.4-2.1.5a6.6 6.6 0 01-.9 2l.9 2-1.1 1.1-2-.9a6.6 6.6 0 01-2.2.1l-.9 2-1.4-.3-1.4-.3-.5-2.1a6.6 6.6 0 01-2-.9l-2 .9-1.1-1.1.9-2a6.6 6.6 0 01-.1-2.2l-2-.9.3-1.4.3-1.4 2.1-.5a6.6 6.6 0 01.9-2l-.9-2 1.1-1.1 2 .9a6.6 6.6 0 012.2-.1l.9-2zM12 9a3 3 0 100 6 3 3 0 000-6z"/></svg>
+        </button>
+      </aside>
+
+      <header class="top-bar glass">
+        <div class="nav-controls">
+          <button id="btn-back" class="nav-btn" title="Précédent">⬅️</button>
+          <button id="btn-forward" class="nav-btn" title="Suivant">➡️</button>
+          <button id="btn-reload" class="nav-btn" title="Actualiser">🔄</button>
+          <button id="btn-home" class="nav-btn" title="Accueil">🏠</button>
+        </div>
+        <div class="address-wrapper glass">
+          <input id="address-bar" type="text" placeholder="Rechercher ou entrer une adresse" />
+        </div>
+        <div class="top-actions">
+          <button id="btn-bookmark" class="nav-btn" title="Ajouter aux favoris">⭐</button>
+          <button id="btn-private" class="nav-btn" title="Nouvelle fenêtre privée">🛡️</button>
+          <button id="btn-settings" class="nav-btn" title="Paramètres">⚙️</button>
+        </div>
+      </header>
+
+      <section id="tabs-bar" class="tabs-bar glass">
+        <button id="btn-new-tab" class="tab new-tab">+</button>
+      </section>
+
+      <main class="content">
+        <section id="home-screen" class="home-screen">
+          <div class="home-overlay glass">
+            <h1>HyperGX</h1>
+            <p>Navigation néon ultra fluide.</p>
+            <div class="home-search">
+              <input id="home-search-input" type="text" placeholder="Entrer une recherche galactique" />
+              <button id="home-search-btn">Explorer</button>
+            </div>
+            <div id="speed-dial" class="speed-dial"></div>
+          </div>
+        </section>
+        <section id="browser-container" class="browser-container">
+          <div id="webviews" class="webviews"></div>
+        </section>
+      </main>
+
+      <section id="panel-favorites" class="side-panel glass" data-panel="favorites">
+        <header>
+          <h2>Favoris</h2>
+          <button class="mini" id="btn-add-bookmark">Ajouter</button>
+        </header>
+        <ul id="favorites-list" class="panel-list"></ul>
+      </section>
+
+      <section id="panel-history" class="side-panel glass" data-panel="history">
+        <header>
+          <h2>Historique</h2>
+          <button class="mini" id="btn-clear-history">Effacer</button>
+        </header>
+        <input id="history-search" type="search" placeholder="Filtrer" />
+        <ul id="history-list" class="panel-list"></ul>
+      </section>
+
+      <section id="panel-downloads" class="side-panel glass" data-panel="downloads">
+        <header>
+          <h2>Téléchargements</h2>
+          <button class="mini" id="btn-clear-downloads">Effacer</button>
+        </header>
+        <ul id="downloads-list" class="panel-list"></ul>
+      </section>
+
+      <section id="panel-settings" class="side-panel glass" data-panel="settings">
+        <header>
+          <h2>Paramètres</h2>
+        </header>
+        <form id="settings-form">
+          <label>
+            Couleur d'accent
+            <input type="color" id="accent-color" />
+          </label>
+          <label>
+            Couleur secondaire
+            <input type="color" id="accent-secondary" />
+          </label>
+          <label>
+            Flou (px)
+            <input type="range" min="0" max="40" id="blur-range" />
+          </label>
+          <label>
+            Opacité
+            <input type="range" min="0.3" max="1" step="0.05" id="opacity-range" />
+          </label>
+          <label>
+            Rayon
+            <input type="range" min="8" max="32" id="radius-range" />
+          </label>
+          <label>
+            Moteur de recherche
+            <input type="text" id="search-engine" />
+          </label>
+          <div class="toggle">
+            <input type="checkbox" id="toggle-animations" />
+            <label for="toggle-animations">Animations UI</label>
+          </div>
+          <div class="toggle">
+            <input type="checkbox" id="toggle-3d" />
+            <label for="toggle-3d">Fond galactique 3D</label>
+          </div>
+          <div class="toggle">
+            <input type="checkbox" id="toggle-favorites" />
+            <label for="toggle-favorites">Barre de favoris</label>
+          </div>
+          <button type="button" id="btn-save-settings" class="primary">Sauvegarder</button>
+        </form>
+      </section>
+    </div>
+    <script src="renderer.js" type="module"></script>
+  </body>
+</html>

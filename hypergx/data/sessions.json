@@ -1,0 +1,10 @@
+{
+  "tabs": [
+    {
+      "id": "tab-1",
+      "title": "HyperGX",
+      "url": "https://www.wikipedia.org"
+    }
+  ],
+  "activeTabId": "tab-1"
+}
